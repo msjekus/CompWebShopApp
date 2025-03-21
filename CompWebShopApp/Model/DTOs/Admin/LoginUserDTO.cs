@@ -4,6 +4,7 @@ namespace CompWebShopApp.Model.DTOs.Admin
 {
     public class LoginUserDTO
     {
+   
         [Required]
         [Display(Name = "Логін")]
         public string UserName { get; set; } = default!;
@@ -11,5 +12,8 @@ namespace CompWebShopApp.Model.DTOs.Admin
         [Display(Name = "Пароль")]
         [DataType(DataType.Password)]
         public string Password { get; set; } = default!;
+
+        [Display(Name = "Запам'ятати мене")]
+        public bool RememberMe { get; set; }
     }
 }

@@ -13,6 +13,6 @@ namespace CompWebShopApp.Data
         public DbSet<Category> Categories { get; set; } = default!;
         public DbSet<ProductImage> ProductImages { get; set; } = default!;
         public DbSet<Product> Products { get; set; } = default!;
-
+       
     }
 }

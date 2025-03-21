@@ -30,8 +30,8 @@
 
                 <div class="col-md-3 text-end">
 
-                    <button type="button" class="btn btn-outline-warning me-2">Login</button>
-                    <button type="button" class="btn btn-warning">Sign-up</button>
+                    <a asp-action="Login" asp-controller="Account" class="btn btn-outline-warning me-2">Login</a>
+                    <a asp-action="Register" asp-controller="Account" class="btn btn-warning">Sign-up</a>
                 </div>
             </header> 
         </div>
@@ -44,7 +44,7 @@
                 <a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
                     <svg class="bi" width="30" height="24"><use xlink:href="#bootstrap"></use></svg>
                 </a>
-                <span class="mb-3 mb-md-0 text-body-secondary">© 2024 - @DateTime.Now Company, Inc</span>
+                <span class="mb-3 mb-md-0 text-body-secondary">© 2024 - @DateTime.Now.Year Company, Inc</span>
             </div>
 
             <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">

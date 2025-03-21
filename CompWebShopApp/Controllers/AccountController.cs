@@ -45,14 +45,31 @@ namespace CompWebShopApp.Controllers
                 else
                 {
                     foreach (var error in res.Errors)
-                    {
                         ModelState.AddModelError(string.Empty, error.Description);
-                    }
-                    return View(dTO);
                 }
-
+                return View(dTO);
             }
-
+        }
+        public IActionResult Login() => View();
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginUserDTO dTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(dTO);
+            }
+            ShopUser? user = await userManager.FindByNameAsync(dTO.UserName);
+            if (user != null)
+            {
+                var res = await signInManager.PasswordSignInAsync(user, dTO.Password, dTO.RememberMe, false);
+                if (res.Succeeded)
+                    return RedirectToAction("Index", "Home");
+                else
+                    ModelState.AddModelError(string.Empty, "Логін або пароль користувача не вірний");
+            }
+            else
+                ModelState.AddModelError(string.Empty, "Користувача не знайдено");
+            return View(dTO);
         }
 
     }
