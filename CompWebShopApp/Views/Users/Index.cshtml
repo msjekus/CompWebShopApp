@@ -1,0 +1,34 @@
+﻿@using CompWebShopApp.Model.DTOs.Users
+@model IEnumerable<ShopUserDTO>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<h1>Список користувачів</h1>
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>@Html.DisplayNameFor(modelItem => modelItem.Id)</th>
+			<th>@Html.DisplayNameFor(modelItem => modelItem.UserName)</th>
+			<th>@Html.DisplayNameFor(modelItem => modelItem.Email)</th>
+			<th>@Html.DisplayNameFor(modelItem => modelItem.DateOfBirth)</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var shopUser in Model)
+		{
+			<tr>
+				<td>@shopUser.Id</td>
+				<td>@shopUser.UserName</td>
+				<td>@shopUser.Email</td>
+				<td>@shopUser.DateOfBirth</td>
+				<td>
+					<a asp-action="Edit" asp-route-id="@shopUser.Id">Редагувати</a> |
+					<a asp-action="ChangePassword" asp-route-id="@shopUser.Id">Змінити пароль</a> |
+					<a asp-action="Delete" asp-route-id="@shopUser.Id">Видалити</a>
+				</td>
+			</tr>
+		}
+				
+</table>

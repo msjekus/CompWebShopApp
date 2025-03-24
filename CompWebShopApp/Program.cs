@@ -1,4 +1,5 @@
 using CompWebShopApp.Data;
+using CompWebShopApp.Profiles;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +20,7 @@ builder.Services.AddIdentity<ShopUser, IdentityRole>(
         options.Password.RequireUppercase = true;
     }).AddEntityFrameworkStores<ShopContext>();
 
+builder.Services.AddAutoMapper(typeof(ShopUserProfile), typeof(RoleProfile));
 
 var app = builder.Build();
 
@@ -28,6 +30,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Account}/{action=Register}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

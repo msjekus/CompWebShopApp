@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 using CompWebShopDomainLibrary;
 using CompWebShopApp.Model.DTOs.Admin;
+using CompWebShopApp.Model.DTOs.Users;
+using CompWebShopApp.Model.ViewModels.Users;
+using CompWebShopApp.Model.DTOs.Roles;
 namespace CompWebShopApp.Data
 {
     public class ShopContext : IdentityDbContext<ShopUser>
@@ -13,6 +16,9 @@ namespace CompWebShopApp.Data
         public DbSet<Category> Categories { get; set; } = default!;
         public DbSet<ProductImage> ProductImages { get; set; } = default!;
         public DbSet<Product> Products { get; set; } = default!;
-       
+
+
+        
+        
     }
 }

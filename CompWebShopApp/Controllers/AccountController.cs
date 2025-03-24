@@ -72,5 +72,11 @@ namespace CompWebShopApp.Controllers
             return View(dTO);
         }
 
+        public async Task<IActionResult> Logout()
+        {
+            await signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
+        }
+
     }
 }
