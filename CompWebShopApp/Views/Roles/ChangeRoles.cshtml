@@ -7,12 +7,13 @@
 }
 <h1>Зміна ролей користувача @(Model.Email)?</h1>
 <hr />
-<form>
+<form method="post">
     <input type="hidden" asp-for="Id" />
-    @foreach(var role in Model.AllRoles)
+    @foreach(var role in Model.AllRoles!)
     {
         <input type="checkbox" name="roles[]"
-        value="@(Model.UserRoles.Contains(role.Name!) ? "true" : "false")"/>
+        value="@role.Name"@(Model.UserRoles!.Contains(role.Name!) 
+        ? "checked" : "")/>
 		<span>@role.Name</span><br/>
     }
     <div class="mb-3">

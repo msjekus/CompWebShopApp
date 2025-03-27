@@ -3,12 +3,14 @@ using CompWebShopApp.Data;
 using CompWebShopApp.Model.DTOs.Roles;
 using CompWebShopApp.Model.DTOs.Users;
 using CompWebShopApp.Model.ViewModels.Roles;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace CompWebShopApp.Controllers
 {
+    [Authorize(Roles = "Admin,Manager")]
     public class RolesController : Controller
     {
         private readonly RoleManager<IdentityRole> roleManager;
@@ -27,6 +29,7 @@ namespace CompWebShopApp.Controllers
             IEnumerable<RoleDTO> rolesDTOs = mapper.Map<IEnumerable<RoleDTO>>(roles);
             return View(rolesDTOs);
         }
+        
         public IActionResult Create() => View();
 
         [HttpPost]
@@ -64,61 +67,74 @@ namespace CompWebShopApp.Controllers
                 Email = user.Email,
                 AllRoles = allRoles,
                 UserRoles = userRoles,
-                Roles = userRoles
             };
             return View(changeRolesVM);
         }
-        public async Task<IActionResult> Edit(string id)
-        {
-            IdentityRole? role = await roleManager.FindByIdAsync(id);
-            if (role == null)
-                return NotFound();
-            RoleDTO roleDTO = mapper.Map<RoleDTO>(role);
-            return View(roleDTO);
-        }
         [HttpPost]
-        public async Task<IActionResult> Edit(RoleDTO roleDTO)
+        public async Task<IActionResult> ChangeRoles(ChangeRolesVM changeRolesVM)
         {
-            if (!ModelState.IsValid)
-                return View(roleDTO);
-            IdentityRole? role = await roleManager.FindByIdAsync(roleDTO.Id);
-            if (role != null)
+            ShopUser? user = await userManager.FindByIdAsync(changeRolesVM.Id);
+            if (user == null) return NotFound();
+            var allRoles = await roleManager.Roles.ToListAsync();
+
+            var userRoles = await userManager.GetRolesAsync(user);
+            if (ModelState.IsValid)
             {
-                role.Name = roleDTO.Name;
-                await roleManager.UpdateAsync(role);
+                var addedRoles = changeRolesVM.Roles.Except(userRoles);
+                var removedRoles = userRoles.Except(changeRolesVM.Roles);
+                await userManager.AddToRolesAsync(user, addedRoles);
+                await userManager.RemoveFromRolesAsync(user, removedRoles);
                 return RedirectToAction("Index");
             }
-            else
-                ModelState.AddModelError(string.Empty, "Ролі не знайдена");
-            return View(roleDTO);
+            changeRolesVM.AllRoles = allRoles;
+            changeRolesVM.UserRoles = userRoles;
+            changeRolesVM.Email = user.Email;
+            return View(changeRolesVM);
         }
-        //public async Task<IActionResult> Delete(string id)
+
+        //public async Task<IActionResult> Edit(string id)
         //{
         //    IdentityRole? role = await roleManager.FindByIdAsync(id);
+        //    if (role == null)
+        //        return NotFound();
+        //    RoleDTO roleDTO = mapper.Map<RoleDTO>(role);
+        //    return View(roleDTO);
+        //}
+        //[HttpPost]
+        //public async Task<IActionResult> Edit(RoleDTO roleDTO)
+        //{
+        //    if (!ModelState.IsValid)
+        //        return View(roleDTO);
+        //    IdentityRole? role = await roleManager.FindByIdAsync(roleDTO.Id);
         //    if (role != null)
         //    {
-        //        IdentityResult result = await roleManager.DeleteAsync(role);
-        //        if (result.Succeeded)
-        //            return RedirectToAction("Index");
-        //        foreach (var error in result.Errors)
-        //            ModelState.AddModelError(string.Empty, error.Description);
+        //        role.Name = roleDTO.Name;
+        //        await roleManager.UpdateAsync(role);
+        //        return RedirectToAction("Index");
         //    }
         //    else
         //        ModelState.AddModelError(string.Empty, "Ролі не знайдена");
-        //    return RedirectToAction("Index");
+        //    return View(roleDTO);
         //}
-        //[HttpPost]
-        //public async Task<IActionResult> ChangeRoles(RoleDTO roleDTO)
-        //{
-        //    ShopUser? user = await userManager.FindByIdAsync(roleDTO.Id);
-        //    if (user == null)
-        //        return NotFound();
-        //    var userRoles = await userManager.GetRolesAsync(user);
-        //    var addedRoles = roleDTO..Except(userRoles);
-        //    var removedRoles = userRoles.Except(roleDTO.Roles);
-        //    await userManager.AddToRolesAsync(user, addedRoles);
-        //    await userManager.RemoveFromRolesAsync(user, removedRoles);
-        //    return RedirectToAction("UserList");
-        //}
+
+        public async Task<IActionResult> Delete(string? id)
+        {
+            if (id == null) return NotFound();
+            IdentityRole? result = await roleManager.FindByIdAsync(id);
+            if(result == null) return NotFound();
+            RoleDTO roleDTO = mapper.Map<RoleDTO>(result);
+            return View(roleDTO);
+        }
+        [HttpPost, ActionName("Delete")]
+        public async Task<IActionResult> DeleteConfirmed(string? id)
+        {
+            if (id == null) return NotFound();
+            IdentityRole? role = await roleManager.FindByIdAsync(id);
+            if (role == null) return NotFound();
+            await roleManager.DeleteAsync(role);
+            return RedirectToAction("Index");
+        }
+
+
     }
 }

@@ -5,30 +5,36 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@ViewBag.Title</title>
-	<link href="~/lib//bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
-	<link href="~/css/style.css" rel="stylesheet"/>
+    <link href="~/lib//bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="~/css/style.css" rel="stylesheet"/>
 </head>
 <body>
     <div class="container-fluid text-bg-success">
         <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom ">
             <div class="col-md-3 mb-2 mb-md-0">
-                    <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none">
+                <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none">
                     <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-cpu-fill" viewBox="0 0 16 16">
                         <path d="M6.5 6a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5z" />
                         <path d="M5.5.5a.5.5 0 0 0-1 0V2A2.5 2.5 0 0 0 2 4.5H.5a.5.5 0 0 0 0 1H2v1H.5a.5.5 0 0 0 0 1H2v1H.5a.5.5 0 0 0 0 1H2v1H.5a.5.5 0 0 0 0 1H2A2.5 2.5 0 0 0 4.5 14v1.5a.5.5 0 0 0 1 0V14h1v1.5a.5.5 0 0 0 1 0V14h1v1.5a.5.5 0 0 0 1 0V14h1v1.5a.5.5 0 0 0 1 0V14a2.5 2.5 0 0 0 2.5-2.5h1.5a.5.5 0 0 0 0-1H14v-1h1.5a.5.5 0 0 0 0-1H14v-1h1.5a.5.5 0 0 0 0-1H14v-1h1.5a.5.5 0 0 0 0-1H14A2.5 2.5 0 0 0 11.5 2V.5a.5.5 0 0 0-1 0V2h-1V.5a.5.5 0 0 0-1 0V2h-1V.5a.5.5 0 0 0-1 0V2h-1zm1 4.5h3A1.5 1.5 0 0 1 11 6.5v3A1.5 1.5 0 0 1 9.5 11h-3A1.5 1.5 0 0 1 5 9.5v-3A1.5 1.5 0 0 1 6.5 5" />
                     </svg>
-                    </a>
-                </div>
+                </a>
+            </div>
 
-                <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-                    <li><a href="#" class="nav-link px-2 link-dark">Home</a></li>
-                    <li><a href="#" class="nav-link px-2 link-warning">Features</a></li>
-                    <li><a href="#" class="nav-link px-2 link-warning">Pricing</a></li>
-                    <li><a href="#" class="nav-link px-2 link-warning">FAQs</a></li>
+            <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+                <li><a href="#" class="nav-link px-2 link-dark">Home</a></li>
+                <li><a href="#" class="nav-link px-2 link-warning">Товари</a></li>
+                <li><a href="#" class="nav-link px-2 link-warning">Категорії</a></li>
+                @if(User.Identity != null && User.IsInRole("Admin"))
+                {
+                    <li><a asp-action="Index" asp-controller="Users" class="nav-link px-2 text-warning">Користувачі</a></li>
+
+                    <li><a asp-action="Index" asp-controller="Roles" class="nav-link px-2 text-warning">Ролі</a></li>
+                }
+                
                     <li><a href="#" class="nav-link px-2 link-warning">About</a></li>
-                </ul>
+            </ul>
 
-                <div class="col-md-3 text-end">
+            <div class="col-md-3 text-end">
 				@if (User.Identity != null && User.Identity.IsAuthenticated)
 				{
 					<span class="me-2">Hello, @User.Identity.Name</span>
@@ -39,9 +45,9 @@
 					<a asp-action="Login" asp-controller="Account" class="btn btn-outline-warning me-2">Login</a>
 					<a asp-action="Register" asp-controller="Account" class="btn btn-warning">Sign-up</a>
 				}
-                </div>
-            </header> 
-        </div>
+            </div>
+        </header> 
+    </div>
     <div id="main" class="container">
         @RenderBody()
     </div>
