@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using CompWebShopApp.Data;
 using CompWebShopApp.Model.DTOs.Users;
+using CompWebShopApp.Model.ViewModels.Claims;
 using CompWebShopApp.Model.ViewModels.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
+using System.Security.Claims;
 
 namespace CompWebShopApp.Controllers
 {
@@ -100,5 +102,19 @@ namespace CompWebShopApp.Controllers
             return RedirectToAction("Index");
         }
 
+        public async Task<IActionResult> ShowClaims(string? id)
+        {
+            if (id == null) return NotFound();
+            ShopUser? user = await userManager.FindByIdAsync(id);
+            if (user == null) return NotFound("Користувача не знайдено");
+            IList<Claim> claims = await userManager.GetClaimsAsync(user);
+            IndexClaimVM vM = new IndexClaimVM()
+            {
+                UserName = user.UserName!,
+                Email = user.Email!,
+                Claims = claims
+            };
+            return View("../Claims/Index",vM);
+        }
     }
 }

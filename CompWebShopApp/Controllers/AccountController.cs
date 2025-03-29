@@ -1,7 +1,9 @@
 ﻿using CompWebShopApp.Data;
 using CompWebShopApp.Model.DTOs.Admin;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace CompWebShopApp.Controllers
 {
@@ -82,6 +84,44 @@ namespace CompWebShopApp.Controllers
         {
             return View();
         }
+        [AllowAnonymous]
+        public IActionResult GoogleLogin()
+        {
+            string? redirectUrl = Url.Action("GoogleResponce","Account");
+            var properties = signInManager.ConfigureExternalAuthenticationProperties("Google", redirectUrl);
+            return Challenge(properties, "Google");
+
+        }
+        [AllowAnonymous]
+        public async Task<IActionResult> GoogleResponce()
+        {
+            ExternalLoginInfo? info = await signInManager.GetExternalLoginInfoAsync();
+            if(info == null)
+                return RedirectToAction("Login");
+            var signInRes = await signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false);
+            if (signInRes.Succeeded)
+            { 
+                string[] userInfo=
+                {   
+                    info.Principal.FindFirst(ClaimTypes.Name)!.Value,
+                    info.Principal.FindFirst(ClaimTypes.Email)!.Value
+                };
+                ShopUser? shopUser = await userManager.FindByEmailAsync(userInfo[1]);
+                if (shopUser == null)
+                {
+                    shopUser = new ShopUser
+                    {
+                        Email = userInfo[1],
+                        UserName = userInfo[1]
+                    };
+                    var createRes = await userManager.CreateAsync(shopUser);
+                }
+                var result=await userManager.AddLoginAsync(shopUser, info);
+                await signInManager.SignInAsync(shopUser, isPersistent: false);
+            }
+            return RedirectToAction("Index", "Home");
+        }
+        
 
     }
 }

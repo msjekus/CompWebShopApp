@@ -4,6 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>8262eef6-e699-4565-a8c3-26284e5b5b31</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,6 +17,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="14.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.14" />
     <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid.EntityFrameworkAdapter" Version="8.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.14" />
