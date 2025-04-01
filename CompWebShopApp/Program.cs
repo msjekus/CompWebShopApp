@@ -25,7 +25,7 @@ builder.Services.AddAuthentication().AddGoogle(options =>
     string clientId = googleSection.GetValue<string>("ClientId") ??
         throw new InvalidOperationException("Please provide ClientId!");
     string clientSecret = googleSection.GetValue<string>("ClientSecret") ??
-        throw new InvalidOperationException("Please provide ClientSecret!");
+        throw new InvalidOperationException("Please provide Client Secret!");
     options.ClientId = clientId;
     options.ClientSecret = clientSecret;
 });

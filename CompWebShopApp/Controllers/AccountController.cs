@@ -95,16 +95,16 @@ namespace CompWebShopApp.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GoogleResponce()
         {
-            ExternalLoginInfo? info = await signInManager.GetExternalLoginInfoAsync();
-            if(info == null)
+            ExternalLoginInfo? loginInfo = await signInManager.GetExternalLoginInfoAsync();
+            if(loginInfo == null)
                 return RedirectToAction("Login");
-            var signInRes = await signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false);
+            var signInRes = await signInManager.ExternalLoginSignInAsync(loginInfo.LoginProvider, loginInfo.ProviderKey, isPersistent: false);
             if (signInRes.Succeeded)
             { 
                 string[] userInfo=
-                {   
-                    info.Principal.FindFirst(ClaimTypes.Name)!.Value,
-                    info.Principal.FindFirst(ClaimTypes.Email)!.Value
+                {
+                    loginInfo.Principal.FindFirst(ClaimTypes.Name)!.Value,
+                    loginInfo.Principal.FindFirst(ClaimTypes.Email)!.Value
                 };
                 ShopUser? shopUser = await userManager.FindByEmailAsync(userInfo[1]);
                 if (shopUser == null)
@@ -116,7 +116,7 @@ namespace CompWebShopApp.Controllers
                     };
                     var createRes = await userManager.CreateAsync(shopUser);
                 }
-                var result=await userManager.AddLoginAsync(shopUser, info);
+                var result = await userManager.AddLoginAsync(shopUser, loginInfo);
                 await signInManager.SignInAsync(shopUser, isPersistent: false);
             }
             return RedirectToAction("Index", "Home");
