@@ -1,5 +1,7 @@
 using CompWebShopApp.Data;
 using CompWebShopApp.Profiles;
+using CompWebShopApp.Requirements;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +21,8 @@ builder.Services.AddIdentity<ShopUser, IdentityRole>(
         options.Password.RequireLowercase = true;
         options.Password.RequireUppercase = true;
     }).AddEntityFrameworkStores<ShopContext>();
+builder.Services.AddScoped<IAuthorizationRequirement, MinimalAgeRequirement>();
+builder.Services.AddScoped<IAuthorizationHandler, MinimalAgeAuthorizationHandler>();
 builder.Services.AddAuthentication().AddGoogle(options =>
 {
     IConfigurationSection googleSection = builder.Configuration.GetSection("Authentication:Google");
@@ -29,8 +33,20 @@ builder.Services.AddAuthentication().AddGoogle(options =>
     options.ClientId = clientId;
     options.ClientSecret = clientSecret;
 });
-
-builder.Services.AddAutoMapper(typeof(ShopUserProfile), typeof(RoleProfile));
+builder.Services.AddAuthorization(configure =>
+{
+    configure.AddPolicy("managerPolicy", policyBuilder =>
+    {
+        policyBuilder.RequireRole("Manager");
+        policyBuilder.RequireRole("Hobbie", "Gardening");
+    });
+    configure.AddPolicy("hasAppropAge", policyBuilder =>
+    {
+        policyBuilder.RequireRole("Admin");
+        policyBuilder.Requirements.Add(new MinimalAgeRequirement {MinimalAge = 18 });
+    });
+});
+builder.Services.AddAutoMapper(typeof(ShopUserProfile), typeof(RoleProfile), typeof(BrandProfile));
 
 var app = builder.Build();
 

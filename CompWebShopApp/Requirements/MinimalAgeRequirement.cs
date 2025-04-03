@@ -7,6 +7,14 @@ namespace CompWebShopApp.Requirements
     public class MinimalAgeRequirement : IAuthorizationRequirement
     {
         public int MinimalAge { get; set; }
+
+        public MinimalAgeRequirement(int minimalAge)=>MinimalAge = minimalAge;
+
+        public MinimalAgeRequirement()
+        {
+            MinimalAge = 16;
+        }
+
     }
 
     public class MinimalAgeAuthorizationHandler : AuthorizationHandler<MinimalAgeRequirement>

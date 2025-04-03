@@ -85,14 +85,13 @@ namespace CompWebShopApp.Controllers
         }
         public async Task<IActionResult> Delete(string? id)
         {
-            if (id == null)
-                return NotFound();
+            if (id == null)return NotFound();
             ShopUser? user = await userManager.FindByIdAsync(id);
             if (user == null) return NotFound("Користувача не знайдено");
             ShopUserDTO userDTO = mapper.Map<ShopUserDTO>(user);
             return View(userDTO);
         }
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirm(string? Id)
         {
             if (Id == null) return NotFound();
