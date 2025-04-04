@@ -22,6 +22,6 @@ namespace CompWebShopApp.Model.DTOs.Products
         public CategoryDTO? Category { get; set; } = default!;
         [Display(Name = "Категорія")]
         public int CategoryId { get; set; }
-        public ICollection<ProductImage> ProductImages { get; set; } = default!;
+        public ICollection<ProductImage>? ProductImages { get; set; } = default!;
     }
 }

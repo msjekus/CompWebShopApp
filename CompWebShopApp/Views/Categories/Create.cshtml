@@ -5,7 +5,7 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1>Додати категорію</h1>
 
 <h4>Category</h4>
 <hr />
@@ -54,18 +54,17 @@
 
                 console.log("FirstChilds", firstChilds);
                 d1.firstChild.id = "firstLevelChilds";
-                if (firstChilds) {
+                if (firstChilds) 
                     firstSel.nextElementSibling.replaceWith(d1.firstChild);
-                }
                 else {
                     firstSel.after(d1.firstChild);
                 }
             }
-            else {
+            else 
+            {
                 if (firstChilds)
                     firstChilds.remove();
-            }
-				
+            }	
         }
     </script>
 }

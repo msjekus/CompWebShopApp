@@ -1,10 +1,10 @@
-﻿@model IEnumerable<CompWebShopDomainLibrary.Brand>
+﻿@model IEnumerable<CompWebShopDomainLibrary.ProductImage>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Бренди</h1>
+<h1>Index</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -13,10 +13,10 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.BrandName)
+                @Html.DisplayNameFor(model => model.ImageData)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Country)
+                @Html.DisplayNameFor(model => model.Product)
             </th>
             <th></th>
         </tr>
@@ -25,10 +25,11 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.BrandName)
+                <img src="data:image/*;base64,@Convert.ToBase64String(item.ImageData)"
+                alt="@item.Product.ProductName" style="width: 200px"/>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Country)
+                @Html.DisplayFor(modelItem => item.Product.Description)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
